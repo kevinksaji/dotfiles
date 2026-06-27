@@ -1,0 +1,23 @@
+.DS_Store
+
+# Secrets — never commit these
+ssh/.ssh/id_*
+ssh/.ssh/*.pem
+ssh/.ssh/known_hosts
+**/.env
+**/*.key
+
+# Tool-managed dirs (not config)
+.sdkman/
+.nvm/
+.conda/
+.cache/
+.npm/
+.gradle/
+.m2/
+
+# Backup files
+*.dotfiles-backup
+*.backup-*
+*.save
+*.pysave
