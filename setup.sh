@@ -21,6 +21,22 @@ fi
 echo "==> Installing packages from Brewfile"
 brew bundle --file="$DOTFILES/Brewfile"
 
+echo "==> Installing Go via goenv"
+export GOENV_ROOT="$HOME/.goenv"
+export PATH="$GOENV_ROOT/bin:$PATH"
+eval "$(goenv init -)"
+GO_LATEST=$(goenv install --list | grep -E '^\s+[0-9]+\.[0-9]+\.[0-9]+$' | tail -1 | tr -d ' ')
+goenv install --skip-existing "$GO_LATEST"
+goenv global "$GO_LATEST"
+
+echo "==> Installing Python via pyenv"
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+PYTHON_LATEST=$(pyenv install --list | grep -E '^\s+3\.[0-9]+\.[0-9]+$' | tail -1 | tr -d ' ')
+pyenv install --skip-existing "$PYTHON_LATEST"
+pyenv global "$PYTHON_LATEST"
+
 echo "==> Installing NVM"
 if [ ! -d "$HOME/.nvm" ]; then
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash

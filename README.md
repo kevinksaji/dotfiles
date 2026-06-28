@@ -39,7 +39,21 @@ This clones the repo to `~/dotfiles` (or pulls the latest if it's already there)
 The script will:
 1. Clone the repo to `~/dotfiles` (or pull the latest if it already exists)
 2. Install [Homebrew](https://brew.sh) if not already installed
-3. Install all packages in the `Brewfile`
+3. Install all tools and languages:
+
+   | Tool | Description |
+   |---|---|
+   | `powerlevel10k` | Shell prompt theme |
+   | `zsh-autosuggestions` | Fish-style command suggestions |
+   | `zsh-syntax-highlighting` | Syntax highlighting in the shell |
+   | `zoxide` | Smarter `cd` |
+   | `font-fira-code-nerd-font` | Nerd Font required for prompt icons |
+   | `llvm` | C/C++ compiler toolchain |
+   | `goenv` + Go | Go version manager |
+   | `pyenv` + Python | Python version manager |
+   | [NVM](https://github.com/nvm-sh/nvm) + Node.js | Node version manager |
+   | [SDKMAN](https://sdkman.io) + Java | Java version manager |
+
 4. Symlink every config file into the right place in your home folder
 5. Prompt for your **name** and **email** for git — stored locally on the machine, never committed to the repo
 6. Import the Terminal profile (font, colours)
