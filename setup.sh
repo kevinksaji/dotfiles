@@ -30,7 +30,7 @@ TOPICS=(zsh git p10k ssh claude)
 for topic in "${TOPICS[@]}"; do
   if [ -d "$DOTFILES/$topic" ]; then
     # --adopt moves any pre-existing real files into the dotfiles repo before symlinking
-    stow --target="$HOME" --adopt --restow "$topic"
+    stow --dir="$DOTFILES" --target="$HOME" --adopt --restow "$topic"
     echo "  stowed: $topic"
   fi
 done
