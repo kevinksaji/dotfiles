@@ -4,6 +4,13 @@ set -euo pipefail
 DOTFILES="$HOME/dotfiles"
 REPO="https://github.com/kevinksaji/dotfiles.git"
 
+echo "==> Installing Xcode Command Line Tools (if missing)"
+if ! command -v git &>/dev/null; then
+  xcode-select --install
+  echo "    Complete the installation dialog, then press Enter to continue..."
+  read -r
+fi
+
 echo "==> Cloning or updating dotfiles repo"
 if [ ! -d "$DOTFILES/.git" ]; then
   rm -rf "$DOTFILES"
