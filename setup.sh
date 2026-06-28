@@ -30,16 +30,14 @@ brew bundle --file="$DOTFILES/Brewfile"
 
 echo "==> Installing Go via goenv"
 export GOENV_ROOT="$HOME/.goenv"
-export PATH="$GOENV_ROOT/bin:$PATH"
-eval "$(goenv init -)"
+export PATH="$GOENV_ROOT/bin:$GOENV_ROOT/shims:$PATH"
 GO_LATEST=$(goenv install --list | grep -E '^\s+[0-9]+\.[0-9]+\.[0-9]+$' | tail -1 | tr -d ' ')
 goenv install --skip-existing "$GO_LATEST"
 goenv use "$GO_LATEST" --global
 
 echo "==> Installing Python via pyenv"
 export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+export PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
 PYTHON_LATEST=$(pyenv install --list | grep -E '^\s+3\.[0-9]+\.[0-9]+$' | tail -1 | tr -d ' ')
 pyenv install --skip-existing "$PYTHON_LATEST"
 pyenv global "$PYTHON_LATEST"
