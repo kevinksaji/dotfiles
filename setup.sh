@@ -27,7 +27,7 @@ export PATH="$GOENV_ROOT/bin:$PATH"
 eval "$(goenv init -)"
 GO_LATEST=$(goenv install --list | grep -E '^\s+[0-9]+\.[0-9]+\.[0-9]+$' | tail -1 | tr -d ' ')
 goenv install --skip-existing "$GO_LATEST"
-goenv global "$GO_LATEST"
+goenv use "$GO_LATEST" --global
 
 echo "==> Installing Python via pyenv"
 export PYENV_ROOT="$HOME/.pyenv"
