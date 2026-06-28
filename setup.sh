@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
+
+# setting instructions
+# -e flag exits immediately if any command fails
+# -u treats unset variables as errors to prevent silent bugs
+# -o pipefail causes whole pipeline to fail on failure of one command
 set -euo pipefail
 
+# setting variables (paths used throughout script)
 DOTFILES="$HOME/dotfiles"
 REPO="https://github.com/kevinksaji/dotfiles.git"
 
 echo "==> Installing Xcode Command Line Tools (if missing)"
+# no git installation means not installed, if so macOS install is triggered
 if ! command -v git &>/dev/null; then
   xcode-select --install
   echo "    Complete the installation dialog, then press Enter to continue..."
@@ -12,6 +19,9 @@ if ! command -v git &>/dev/null; then
 fi
 
 echo "==> Cloning or updating dotfiles repo"
+# if doesnt exist, clones fresh repo
+# if exists but not git repo, wipes existing and clones fresh
+# else git pull
 if [ ! -d "$DOTFILES/.git" ]; then
   rm -rf "$DOTFILES"
   git clone "$REPO" "$DOTFILES"
