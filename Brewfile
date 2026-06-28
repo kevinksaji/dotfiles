@@ -3,6 +3,9 @@ brew "stow"
 brew "git"
 brew "git-lfs"
 
+# Nerd Font (required for Powerlevel10k icons)
+cask "font-meslo-lg-nerd-font"
+
 # Shell enhancements
 brew "powerlevel10k"
 brew "zsh-autosuggestions"
