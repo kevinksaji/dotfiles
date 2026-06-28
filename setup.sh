@@ -35,9 +35,9 @@ echo "==> Restoring repo versions (overriding any adopted local changes)"
 git -C "$DOTFILES" checkout -- .
 
 echo "==> Importing Terminal profile"
-open "$DOTFILES/terminal/Basic.terminal"
-defaults write com.apple.Terminal "Default Window Settings" -string "Basic"
-defaults write com.apple.Terminal "Startup Window Settings" -string "Basic"
+open "$DOTFILES/terminal/kevinsaji.terminal"
+defaults write com.apple.Terminal "Default Window Settings" -string "kevinsaji"
+defaults write com.apple.Terminal "Startup Window Settings" -string "kevinsaji"
 
 echo ""
 echo "Done. Reloading shell..."
