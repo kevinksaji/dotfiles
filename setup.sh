@@ -34,8 +34,10 @@ if [ ! -d "$HOME/.sdkman" ]; then
   curl -s "https://get.sdkman.io" | bash
 fi
 export SDKMAN_DIR="$HOME/.sdkman"
+set +u
 [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
 sdk install java
+set -u
 
 echo "==> Git identity"
 read -rp "    Name:  " git_name
