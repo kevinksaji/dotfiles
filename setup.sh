@@ -21,6 +21,10 @@ fi
 echo "==> Installing packages from Brewfile"
 brew bundle --file="$DOTFILES/Brewfile"
 
+echo "==> Git identity"
+read -rp "    Name:  " git_name
+read -rp "    Email: " git_email
+
 echo "==> Stowing dotfiles"
 TOPICS=(zsh git p10k ssh claude)
 for topic in "${TOPICS[@]}"; do
@@ -33,6 +37,10 @@ done
 
 echo "==> Restoring repo versions (overriding any adopted local changes)"
 git -C "$DOTFILES" checkout -- .
+
+echo "==> Configuring git identity"
+git config --global user.name  "$git_name"
+git config --global user.email "$git_email"
 
 echo "==> Importing Terminal profile"
 open "$DOTFILES/terminal/kevinsaji.terminal"
