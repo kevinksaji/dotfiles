@@ -48,5 +48,6 @@ defaults write com.apple.Terminal "Default Window Settings" -string "kevinsaji"
 defaults write com.apple.Terminal "Startup Window Settings" -string "kevinsaji"
 
 echo ""
-echo "Done. Reloading shell..."
-exec zsh
+echo "Done. Open a new terminal to get started."
+sleep 2
+exit
