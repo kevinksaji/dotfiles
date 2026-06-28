@@ -39,8 +39,8 @@ echo "==> Restoring repo versions (overriding any adopted local changes)"
 git -C "$DOTFILES" checkout -- .
 
 echo "==> Configuring git identity"
-git config --global user.name  "$git_name"
-git config --global user.email "$git_email"
+git config -f ~/.gitconfig.local user.name  "$git_name"
+git config -f ~/.gitconfig.local user.email "$git_email"
 
 echo "==> Importing Terminal profile"
 open "$DOTFILES/terminal/kevinsaji.terminal"
