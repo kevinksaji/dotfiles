@@ -4,7 +4,7 @@ brew "git"
 brew "git-lfs"
 
 # Nerd Font (required for Powerlevel10k icons)
-cask "font-meslo-lg-nerd-font"
+cask "font-fira-code-nerd-font"
 
 # Shell enhancements
 brew "powerlevel10k"
