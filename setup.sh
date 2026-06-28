@@ -43,9 +43,16 @@ git config -f ~/.gitconfig.local user.name  "$git_name"
 git config -f ~/.gitconfig.local user.email "$git_email"
 
 echo "==> Importing Terminal profile"
-open "$DOTFILES/terminal/kevinsaji.terminal"
+# Register the profile straight into Terminal's prefs via cfprefsd instead of `open`-ing
+# the .terminal file. `open` always spawns a new window (and switches you to Terminal.app
+# even when run from the VS Code terminal); merging the dict here does neither.
+PROFILE_XML="$(plutil -convert xml1 -o - "$DOTFILES/terminal/kevinsaji.terminal")"
+defaults write com.apple.Terminal "Window Settings" -dict-add "kevinsaji" "$PROFILE_XML"
 defaults write com.apple.Terminal "Default Window Settings" -string "kevinsaji"
 defaults write com.apple.Terminal "Startup Window Settings" -string "kevinsaji"
 
 echo ""
-echo "Done. A new Terminal window has opened — use that and close this one."
+echo "Done. Reloading your shell — new Terminal windows will use the kevinsaji profile."
+# exec replaces this process with a fresh interactive zsh in the same window, so the new
+# config loads with no second window. Works whether you ran setup from Terminal or VS Code.
+exec zsh
