@@ -36,8 +36,14 @@ git -C "$DOTFILES" checkout -- .
 
 echo "==> Importing Terminal profile"
 open "$DOTFILES/terminal/kevinsaji.terminal"
-sleep 1
-osascript -e 'tell application "Terminal" to close (every window whose name contains "kevinsaji")'
+osascript -e '
+  tell application "Terminal"
+    repeat until (exists (some window whose name contains "kevinsaji"))
+      delay 0.1
+    end repeat
+    close (every window whose name contains "kevinsaji")
+  end tell
+'
 defaults write com.apple.Terminal "Default Window Settings" -string "kevinsaji"
 defaults write com.apple.Terminal "Startup Window Settings" -string "kevinsaji"
 
