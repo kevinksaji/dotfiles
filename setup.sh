@@ -34,6 +34,11 @@ done
 echo "==> Restoring repo versions (overriding any adopted local changes)"
 git -C "$DOTFILES" checkout -- .
 
+echo "==> Importing Terminal profile"
+open "$DOTFILES/terminal/Basic.terminal"
+defaults write com.apple.Terminal "Default Window Settings" -string "Basic"
+defaults write com.apple.Terminal "Startup Window Settings" -string "Basic"
+
 echo ""
 echo "Done. Reloading shell..."
 exec zsh
