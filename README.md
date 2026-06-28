@@ -6,11 +6,11 @@ Personal Mac configuration managed with [GNU Stow](https://www.gnu.org/software/
 
 | Package | Files | What it does |
 |---|---|---|
-| `zsh` | `.zshrc`, `.zprofile` | Shell configuration, PATH, tool initialisation |
-| `git` | `.gitconfig`, `.gitignore_global` | Git identity and global ignore rules |
-| `p10k` | `.p10k.zsh` | Terminal prompt theme (Powerlevel10k) |
-| `ssh` | `.ssh/config` | SSH agent and key settings |
-| `claude` | `.claude/settings.json` | Claude Code model settings |
+| `zsh` | `.zshrc`, `.zprofile` | Shell config — PATH, version managers, plugins, prompt |
+| `git` | `.gitconfig`, `.gitignore_global` | Git settings and global ignore rules. Identity (name/email) is set per-machine and never stored in the repo |
+| `p10k` | `.p10k.zsh` | Powerlevel10k prompt theme — colours, icons, git status display |
+| `ssh` | `.ssh/config` | SSH connection settings — key locations and macOS Keychain integration. Private keys are never stored in the repo |
+| `claude` | `.claude/settings.json` | Claude Code model and effort settings |
 
 ## Prerequisites
 
@@ -37,9 +37,12 @@ bash <(curl -fsSL https://raw.githubusercontent.com/kevinksaji/dotfiles/main/set
 This clones the repo to `~/dotfiles` (or pulls the latest if it's already there) and configures everything in one shot.
 
 The script will:
-1. Install [Homebrew](https://brew.sh) (the Mac package manager) if it is not already installed
-2. Install all packages listed in the `Brewfile` (git-lfs, zoxide, zsh plugins, etc.)
-3. Symlink every config file into the right place in your home folder
+1. Clone the repo to `~/dotfiles` (or pull the latest if it already exists)
+2. Install [Homebrew](https://brew.sh) if not already installed
+3. Install all packages in the `Brewfile`
+4. Symlink every config file into the right place in your home folder
+5. Prompt for your **name** and **email** for git — stored locally on the machine, never committed to the repo
+6. Import the Terminal profile (font, colours)
 
 The script reloads your shell automatically when done. Your configuration will be active immediately.
 
