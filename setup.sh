@@ -35,4 +35,5 @@ echo "==> Restoring repo versions (overriding any adopted local changes)"
 git -C "$DOTFILES" checkout -- .
 
 echo ""
-echo "Done. Restart your terminal."
+echo "Done. Reloading shell..."
+exec zsh

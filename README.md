@@ -41,9 +41,7 @@ The script will:
 2. Install all packages listed in the `Brewfile` (git-lfs, zoxide, zsh plugins, etc.)
 3. Symlink every config file into the right place in your home folder
 
-### Step 3 — Restart your terminal
-
-Close and reopen Terminal (or your terminal app of choice). Your shell, prompt, and tools will be active.
+The script reloads your shell automatically when done. Your configuration will be active immediately.
 
 ---
 
