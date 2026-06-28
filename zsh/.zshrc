@@ -8,6 +8,8 @@ typeset -U PATH path
 
 # --- PATH: languages & SDKs ---
 export PATH="/opt/homebrew/opt/python/bin:$PATH"
+alias python=python3
+alias pip=pip3
 export PATH="$PATH:$(go env GOPATH)/bin"
 
 # LLVM (Homebrew)
