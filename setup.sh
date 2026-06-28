@@ -21,6 +21,22 @@ fi
 echo "==> Installing packages from Brewfile"
 brew bundle --file="$DOTFILES/Brewfile"
 
+echo "==> Installing NVM"
+if [ ! -d "$HOME/.nvm" ]; then
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+fi
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+nvm install --lts
+
+echo "==> Installing SDKMAN and Java"
+if [ ! -d "$HOME/.sdkman" ]; then
+  curl -s "https://get.sdkman.io" | bash
+fi
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+sdk install java
+
 echo "==> Git identity"
 read -rp "    Name:  " git_name
 read -rp "    Email: " git_email

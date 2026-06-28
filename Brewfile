@@ -17,4 +17,5 @@ brew "llvm"
 
 # Languages / runtimes
 brew "go"
+brew "python"
 brew "pnpm"
