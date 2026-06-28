@@ -27,7 +27,7 @@
 	AAOL
 	</data>
 	<key>CursorBlink</key>
-	<false/>
+	<true/>
 	<key>CursorType</key>
 	<integer>0</integer>
 	<key>Font</key>
