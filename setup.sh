@@ -2,6 +2,15 @@
 set -euo pipefail
 
 DOTFILES="$HOME/dotfiles"
+REPO="https://github.com/kevinksaji/dotfiles.git"
+
+echo "==> Cloning or updating dotfiles repo"
+if [ ! -d "$DOTFILES/.git" ]; then
+  rm -rf "$DOTFILES"
+  git clone "$REPO" "$DOTFILES"
+else
+  git -C "$DOTFILES" pull
+fi
 
 echo "==> Installing Homebrew (if missing)"
 if ! command -v brew &>/dev/null; then

@@ -28,18 +28,13 @@ A dialog will appear. Click **Install** and wait for it to finish (a few minutes
 
 > **Important:** the repo must be cloned to `~/dotfiles` exactly. The setup script expects it there.
 
-### Step 1 — Clone the repo
+### Step 1 — Download and run the setup script
 
 ```sh
-git clone https://github.com/kevinksaji/dotfiles.git ~/dotfiles
+bash <(curl -fsSL https://raw.githubusercontent.com/kevinksaji/dotfiles/main/setup.sh)
 ```
 
-### Step 2 — Run the setup script
-
-```sh
-cd ~/dotfiles
-bash setup.sh
-```
+This clones the repo to `~/dotfiles` (or pulls the latest if it's already there) and configures everything in one shot.
 
 The script will:
 1. Install [Homebrew](https://brew.sh) (the Mac package manager) if it is not already installed
