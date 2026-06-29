@@ -1822,5 +1822,8 @@
 # Tell `p10k configure` which file it should overwrite.
 typeset -g POWERLEVEL9K_CONFIG_FILE=${${(%):-%x}:a}
 
+# VS Code's terminal can't reflow RPROMPT on resize without duplicating lines.
+[[ "$TERM_PROGRAM" == "vscode" ]] && typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
+
 (( ${#p10k_config_opts} )) && setopt ${p10k_config_opts[@]}
 'builtin' 'unset' 'p10k_config_opts'
