@@ -62,7 +62,7 @@ nvm install --lts
 
 echo "==> Installing SDKMAN and Java"
 if [ ! -d "$HOME/.sdkman" ]; then
-  curl -s "https://get.sdkman.io" | bash
+  curl -s "https://get.sdkman.io" | zsh
 fi
 export SDKMAN_DIR="$HOME/.sdkman"
 set +u
