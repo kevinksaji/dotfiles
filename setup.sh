@@ -101,7 +101,5 @@ defaults write com.apple.Terminal "Default Window Settings" -string "kevinsaji"
 defaults write com.apple.Terminal "Startup Window Settings" -string "kevinsaji"
 
 echo ""
-echo "Done. Reloading your shell — new Terminal windows will use the kevinsaji profile."
-# exec replaces this process with a fresh interactive zsh in the same window, so the new
-# config loads with no second window. Works whether you ran setup from Terminal or VS Code.
-exec zsh
+echo "Done. Close this window and open a new Terminal window to use the kevinsaji profile."
+exit
