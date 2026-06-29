@@ -64,11 +64,11 @@ echo "==> Installing SDKMAN and Java"
 if [ ! -d "$HOME/.sdkman" ]; then
   curl -s "https://get.sdkman.io" | zsh
 fi
-export SDKMAN_DIR="$HOME/.sdkman"
-set +u
-[[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
-sdk install java
-set -u
+zsh -c '
+  export SDKMAN_DIR="$HOME/.sdkman"
+  [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+  sdk install java
+'
 
 echo "==> Git identity"
 read -rp "    Name:  " git_name
