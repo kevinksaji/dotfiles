@@ -41,13 +41,15 @@ xcode-select --install
 
 A dialog will appear. Click **Install** and wait for it to finish (a few minutes).
 
-> **Important:** the repo must be cloned to `~/dotfiles` exactly. The setup script expects it there.
-
 ```sh
 bash <(curl -fsSL https://raw.githubusercontent.com/kevinksaji/dotfiles/main/setup.sh)
 ```
 
-This clones the repo to `~/dotfiles` (or pulls the latest if it's already there) and configures everything in one shot. The script will:
+This clones the repo to `~/dotfiles` (or pulls the latest if it's already there) and configures everything in one shot — you don't clone anything yourself first.
+
+> **If you already have this repo cloned somewhere else** (e.g. `~/code/dotfiles`), move or re-clone it to `~/dotfiles` before running the script. The path is hardcoded, and if something other than a git checkout of this repo is already sitting at `~/dotfiles`, the script deletes it before cloning fresh.
+
+The script will:
 
 1. Clone or update the repo at `~/dotfiles`
 2. Install [Homebrew](https://brew.sh) if not already installed
