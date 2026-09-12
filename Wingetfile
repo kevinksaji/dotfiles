@@ -1,0 +1,22 @@
+# Windows package list, installed by setup.ps1 via winget.
+# Format: <winget package id>   # comment
+# Blank lines and lines starting with # are ignored.
+# Mirrors Brewfile (the macOS equivalent).
+
+# Core
+Microsoft.PowerShell                 # PowerShell 7 (the shell this repo configures)
+Microsoft.WindowsTerminal            # terminal emulator
+Git.Git                              # git
+GitHub.GitLFS                        # git-lfs
+
+# Shell enhancements
+JanDeDobbeleer.OhMyPosh              # prompt theme engine (Powerlevel10k equivalent)
+ajeetdsouza.zoxide                   # smarter cd
+
+# Compiler toolchain
+LLVM.LLVM                            # clang/lld
+
+# Languages / runtimes
+GoLang.Go                            # Go (goenv has no Windows support)
+CoreyButler.NVMforWindows            # Node version manager
+EclipseAdoptium.Temurin.21.JDK       # Java 21 (SDKMAN has no native Windows support)

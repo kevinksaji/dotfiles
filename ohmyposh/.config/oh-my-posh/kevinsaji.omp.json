@@ -1,0 +1,103 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "version": 2,
+  "final_space": true,
+  "console_title_template": "{{ .Folder }}",
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "type": "os",
+          "style": "diamond",
+          "leading_diamond": "",
+          "powerline_symbol": "",
+          "foreground": "#000000",
+          "background": "#c5c5c5",
+          "template": " {{ .Icon }} "
+        },
+        {
+          "type": "path",
+          "style": "powerline",
+          "powerline_symbol": "",
+          "foreground": "#e4e4e4",
+          "background": "#0087d7",
+          "properties": {
+            "style": "agnoster_short",
+            "max_depth": 3,
+            "folder_separator_icon": "/",
+            "home_icon": "~"
+          },
+          "template": " {{ .Path }} "
+        },
+        {
+          "type": "git",
+          "style": "powerline",
+          "powerline_symbol": "",
+          "foreground": "#000000",
+          "background": "#008000",
+          "background_templates": [
+            "{{ if or (.Working.Changed) (.Staging.Changed) }}#d7af00{{ end }}",
+            "{{ if gt .Ahead 0 }}#008000{{ end }}",
+            "{{ if gt .Behind 0 }}#008000{{ end }}"
+          ],
+          "properties": {
+            "fetch_status": true,
+            "fetch_upstream_icon": true,
+            "branch_icon": " "
+          },
+          "template": " {{ .UpstreamIcon }}{{ .HEAD }}{{ if .Working.Changed }}  {{ .Working.String }}{{ end }}{{ if .Staging.Changed }}  {{ .Staging.String }}{{ end }}{{ if gt .Ahead 0 }} ↑{{ .Ahead }}{{ end }}{{ if gt .Behind 0 }} ↓{{ .Behind }}{{ end }} "
+        }
+      ]
+    },
+    {
+      "type": "rprompt",
+      "overflow": "hidden",
+      "segments": [
+        {
+          "type": "status",
+          "style": "plain",
+          "foreground": "#d70000",
+          "template": "  {{ .Code }} ",
+          "properties": { "always_enabled": false }
+        },
+        {
+          "type": "executiontime",
+          "style": "plain",
+          "foreground": "#d7af00",
+          "properties": { "threshold": 3000, "style": "round" },
+          "template": " {{ .FormattedMs }} "
+        },
+        {
+          "type": "python",
+          "style": "plain",
+          "foreground": "#00afaf",
+          "properties": { "display_mode": "context", "fetch_virtual_env": true },
+          "template": "  {{ .Full }} "
+        },
+        {
+          "type": "node",
+          "style": "plain",
+          "foreground": "#5fd700",
+          "properties": { "display_mode": "files", "fetch_package_manager": false },
+          "template": "  {{ .Full }} "
+        },
+        {
+          "type": "go",
+          "style": "plain",
+          "foreground": "#00afaf",
+          "properties": { "display_mode": "files" },
+          "template": "  {{ .Full }} "
+        },
+        {
+          "type": "java",
+          "style": "plain",
+          "foreground": "#d75f00",
+          "properties": { "display_mode": "files" },
+          "template": "  {{ .Full }} "
+        }
+      ]
+    }
+  ]
+}

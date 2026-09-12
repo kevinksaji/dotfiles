@@ -1,9 +1,14 @@
 .DS_Store
+Thumbs.db
+desktop.ini
 
 # Secrets — never commit these
 ssh/.ssh/id_*
 ssh/.ssh/*.pem
 ssh/.ssh/known_hosts
+ssh-windows/.ssh/id_*
+ssh-windows/.ssh/*.pem
+ssh-windows/.ssh/known_hosts
 **/.env
 **/*.key
 
