@@ -1,22 +1,25 @@
-# Windows package list, installed by setup.ps1 via winget.
-# Format: <winget package id>   # comment
+# Windows package list, installed or upgraded by setup.ps1 via winget.
+# Format: <winget package id> [extra winget args]   # comment
 # Blank lines and lines starting with # are ignored.
-# Mirrors Brewfile (the macOS equivalent).
+#
+# Language toolchains are NOT listed here. Python, Java, Go and C each need
+# follow-up work a flat list cannot express (PY_PYTHON, JAVA_HOME, pacman), so
+# setup.ps1 installs them itself. This file is only for things that need
+# nothing but an install.
+#
+# `--scope user` is set wherever the publisher offers a user-scope installer:
+# those install with no UAC prompt at all.
 
 # Core
 Microsoft.PowerShell                 # PowerShell 7 (the shell this repo configures)
 Microsoft.WindowsTerminal            # terminal emulator
-Git.Git                              # git
-GitHub.GitLFS                        # git-lfs
+Git.Git                 --scope user # git (bundles git-lfs - no separate package)
 
 # Shell enhancements
-JanDeDobbeleer.OhMyPosh              # prompt theme engine (Powerlevel10k equivalent)
-ajeetdsouza.zoxide                   # smarter cd
+JanDeDobbeleer.OhMyPosh --scope user # prompt theme engine
+ajeetdsouza.zoxide      --scope user # smarter cd
 
-# Compiler toolchain
-LLVM.LLVM                            # clang/lld
-
-# Languages / runtimes
-GoLang.Go                            # Go (goenv has no Windows support)
-CoreyButler.NVMforWindows            # Node version manager
-EclipseAdoptium.Temurin.21.JDK       # Java 21 (SDKMAN has no native Windows support)
+# Node.js
+# fnm, not nvm-windows: nvm-windows switches versions by rewriting a symlink
+# under Program Files, so every `nvm use` needs elevation. fnm switches via PATH.
+Schniz.fnm              --scope user # Node version manager
