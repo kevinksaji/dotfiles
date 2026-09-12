@@ -618,20 +618,10 @@ Include $dotfilesSlash/ssh-windows/.ssh/config
 # points core.excludesfile at the repo copy, and the profile sets STARSHIP_CONFIG
 # straight to the repo path.
 
-# Git Bash - a third shell, alongside PowerShell, that shares the same Starship
-# config. Bash (MSYS/Cygwin) accepts a Windows-style "C:/..." path directly, so
-# this reuses $dotfilesSlash rather than converting to a POSIX "/c/..." one.
-# .bash_profile sources .bashrc so this works whether Git Bash starts as a
-# login shell or not; both stubs are written unconditionally, same as the rest,
-# since an unused file when Git Bash isn't installed is harmless.
-Write-Stub -Target (Join-Path $HOME '.bashrc') -Label '.bashrc' -Content @"
-# Managed by kevinksaji/dotfiles - edit the repo copy, not this stub.
-[ -f "$dotfilesSlash/gitbash/.bashrc" ] && . "$dotfilesSlash/gitbash/.bashrc"
-"@
-Write-Stub -Target (Join-Path $HOME '.bash_profile') -Label '.bash_profile' -Content @"
-# Managed by kevinksaji/dotfiles - edit the repo copy, not this stub.
-[ -f ~/.bashrc ] && . ~/.bashrc
-"@
+# Git Bash is deliberately left alone - it keeps whatever prompt Git for
+# Windows ships by default. Starship was wired in here once, but readline's
+# own multi-line-prompt redraw bug (see README) made it worse than useful, so
+# it was pulled back out; this repo writes no .bashrc or .bash_profile at all.
 
 # Claude Code has no include mechanism, so this one is a copy. It is the only
 # managed file whose edits do not flow back to the repo on their own.

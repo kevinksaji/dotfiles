@@ -20,7 +20,12 @@ add_newline = false
 
 [directory]
 style = "#5fafff"
-truncation_length = 3
+# 1 segment, not 3 - a shorter line 1 wraps at a narrower terminal width than a
+# longer one, and wrapped content is exactly what the resize bug needs to bite
+# (see README). truncate_to_repo already collapses everything above a repo
+# root to its name, so inside a repo this still reads as e.g. "dotfiles" or
+# "components", just with parent segments dropped when nested deeper.
+truncation_length = 1
 truncate_to_repo = true
 home_symbol = "~"
 
