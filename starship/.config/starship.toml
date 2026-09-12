@@ -1,0 +1,60 @@
+# Shared prompt config for both platforms - zsh (macOS) and PowerShell (Windows).
+# Neither profile copies this file: both point STARSHIP_CONFIG straight at the
+# repo, the same way they already reference other shared config in place.
+#
+# Two lines, plain text, no right-hand prompt - deliberately. A long single-line
+# prompt with a right side is what makes a terminal resize misplace the cursor
+# (the shell's line editor and the terminal's own reflow disagree about where
+# the prompt now starts); keeping this short and simple narrows how often that
+# is hit, though it cannot eliminate it - that bug lives in the shell/terminal,
+# not the prompt. See README.md.
+
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+$directory$git_branch$git_status
+$character"""
+
+right_format = ""
+add_newline = false
+
+[directory]
+style = "#5fafff"
+truncation_length = 3
+truncate_to_repo = true
+home_symbol = "~"
+
+[git_branch]
+style = "#5fd700"
+format = "[$symbol$branch]($style) "
+symbol = ""
+
+[git_status]
+# Starship's own symbols, each with a file count appended via its per-type
+# $count variable (opt-in - the actual default is a bare symbol with no count,
+# verified against `starship print-config --default`, not assumed).
+#
+# Every type below carries its own inline [text](style), so nothing falls
+# back to the module's own `style` any more - that field now colours only the
+# literal brackets the default format wraps the whole thing in, giving them a
+# fourth, neutral colour distinct from every severity below:
+#   grey   - the brackets themselves, pure decoration
+#   red    - conflicted / deleted: the two that can lose work
+#   teal   - untracked: not yet known to git at all, a step below "changed"
+#   yellow - modified / staged / renamed / stashed / ahead / behind / diverged:
+#            routine, in-progress state
+style = "#6c6c6c"
+conflicted = "[=$count](#d70000)"
+deleted = "[✘$count](#d70000)"
+untracked = "[?$count](#00afaf)"
+ahead = "[⇡$count](#d7af00)"
+behind = "[⇣$count](#d7af00)"
+diverged = "[⇕⇡$ahead_count⇣$behind_count](#d7af00)"
+stashed = "[\\$$count](#d7af00)"
+modified = "[!$count](#d7af00)"
+staged = "[+$count](#d7af00)"
+renamed = "[»$count](#d7af00)"
+
+[character]
+success_symbol = "[❯](#5fd700)"
+error_symbol = "[❯](#d70000)"

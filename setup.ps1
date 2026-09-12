@@ -614,9 +614,24 @@ Write-Stub -Target (Join-Path $HOME '.ssh\config') -Label '.ssh/config' -Content
 Include $dotfilesSlash/ssh-windows/.ssh/config
 "@
 
-# .gitignore_global and the oh-my-posh theme need no stub at all: git/.gitconfig
-# points core.excludesfile at the repo copy, and the profile passes the theme
-# path straight to oh-my-posh.
+# .gitignore_global and the starship theme need no stub at all: git/.gitconfig
+# points core.excludesfile at the repo copy, and the profile sets STARSHIP_CONFIG
+# straight to the repo path.
+
+# Git Bash - a third shell, alongside PowerShell, that shares the same Starship
+# config. Bash (MSYS/Cygwin) accepts a Windows-style "C:/..." path directly, so
+# this reuses $dotfilesSlash rather than converting to a POSIX "/c/..." one.
+# .bash_profile sources .bashrc so this works whether Git Bash starts as a
+# login shell or not; both stubs are written unconditionally, same as the rest,
+# since an unused file when Git Bash isn't installed is harmless.
+Write-Stub -Target (Join-Path $HOME '.bashrc') -Label '.bashrc' -Content @"
+# Managed by kevinksaji/dotfiles - edit the repo copy, not this stub.
+[ -f "$dotfilesSlash/gitbash/.bashrc" ] && . "$dotfilesSlash/gitbash/.bashrc"
+"@
+Write-Stub -Target (Join-Path $HOME '.bash_profile') -Label '.bash_profile' -Content @"
+# Managed by kevinksaji/dotfiles - edit the repo copy, not this stub.
+[ -f ~/.bashrc ] && . ~/.bashrc
+"@
 
 # Claude Code has no include mechanism, so this one is a copy. It is the only
 # managed file whose edits do not flow back to the repo on their own.

@@ -105,6 +105,16 @@ if (Get-Module -ListAvailable PSReadLine) {
     Set-PSReadLineKeyHandler -Key UpArrow   -Function HistorySearchBackward
     Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
     Set-PSReadLineKeyHandler -Key Tab       -Function MenuComplete
+
+    # Resizing a terminal while the prompt is wrapped leaves PSReadLine's idea of
+    # where input starts out of sync with what is on screen, so the cursor lands
+    # in the wrong place. This is PSReadLine issue #3637, still open, and no
+    # option avoids it. F5 redraws the prompt in place to recover - unlike Ctrl+L
+    # (ClearScreen) it does not wipe the scrollback.
+    Set-PSReadLineKeyHandler -Key F5 -BriefDescription RedrawPrompt `
+        -LongDescription 'Redraw the prompt after a terminal resize' -ScriptBlock {
+            [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
+        }
 }
 
 # File-type glyphs in ls output (needs the Nerd Font)
@@ -116,10 +126,11 @@ if (Get-Command zoxide -ErrorAction SilentlyContinue) {
 }
 
 # --- Prompt ---
-# Read straight from the repo - no symlink or copy in ~/.config needed.
-$ompTheme = "$Dotfiles\ohmyposh\.config\oh-my-posh\kevinsaji.omp.json"
-if ((Get-Command oh-my-posh -ErrorAction SilentlyContinue) -and (Test-Path $ompTheme)) {
-    oh-my-posh init pwsh --config $ompTheme | Invoke-Expression
+# Starship - read straight from the repo, same config the zsh profile uses.
+# No Nerd Font glyphs in it, so it renders correctly even before the font lands.
+$env:STARSHIP_CONFIG = "$Dotfiles\starship\.config\starship.toml"
+if (Get-Command starship -ErrorAction SilentlyContinue) {
+    Invoke-Expression (&starship init powershell)
 }
 
 # --- Completions ---

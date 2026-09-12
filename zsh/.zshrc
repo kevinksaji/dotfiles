@@ -21,11 +21,6 @@ export NVM_DIR="$HOME/.nvm"
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
 
-# Powerlevel10k instant prompt — must come after version managers, before everything else
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 # Deduplicate PATH entries
 typeset -U PATH path
 
@@ -43,8 +38,10 @@ fi
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 eval "$(zoxide init zsh)"
-source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Starship - read straight from the repo, same config the Windows profile uses.
+export STARSHIP_CONFIG="$HOME/dotfiles/starship/.config/starship.toml"
+eval "$(starship init zsh)"
 
 # --- Completions ---
 fpath=($HOME/.docker/completions $fpath)

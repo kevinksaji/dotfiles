@@ -2,14 +2,14 @@
 
 Personal machine configuration for **macOS** and **Windows**. One script per platform sets up a new machine or syncs an existing one.
 
-The two platforms are deliberately kept separate, and Windows is **not** a port of the macOS setup. macOS uses zsh, Homebrew, GNU Stow and the Unix version managers; Windows uses PowerShell 7, winget, native Windows toolchains and each tool's own config-include mechanism. Only the genuinely portable configs (`git`, `claude`) are shared.
+The two platforms are deliberately kept separate, and Windows is **not** a port of the macOS setup. macOS uses zsh, Homebrew, GNU Stow and the Unix version managers; Windows uses PowerShell 7, winget, native Windows toolchains and each tool's own config-include mechanism. The genuinely portable configs — `git`, `claude`, and the prompt — are shared.
 
 | | macOS | Windows |
 |---|---|---|
 | Setup script | `setup.sh` | `setup.ps1` |
 | Package list | `Brewfile` | `Wingetfile` |
 | Shell | zsh (`zsh/`) | PowerShell 7 (`powershell/`) |
-| Prompt | Powerlevel10k (`p10k/`) | oh-my-posh (`ohmyposh/`) |
+| Prompt | Starship (`starship/`, shared) | Starship (`starship/`, shared) |
 | Terminal | Terminal.app (`terminal/`) | Windows Terminal (`windows-terminal/`) |
 | SSH | `ssh/` | `ssh-windows/` |
 | Wiring | GNU Stow symlinks | native include stubs (no admin) |
@@ -19,15 +19,15 @@ The two platforms are deliberately kept separate, and Windows is **not** a port 
 | Package | Platform | Files | What it does |
 |---|---|---|---|
 | `zsh` | macOS | `.zshrc`, `.zprofile` | Shell config — PATH, version managers, plugins, prompt |
-| `p10k` | macOS | `.p10k.zsh` | Powerlevel10k prompt theme — colours, icons, git status display |
 | `terminal` | macOS | `kevinsaji.terminal` | Terminal.app profile — font, colours |
 | `ssh` | macOS | `.ssh/config` | SSH settings with macOS Keychain integration |
 | `powershell` | Windows | `Microsoft.PowerShell_profile.ps1` | Shell config — PATH, `Use-Java`, PSReadLine, prompt |
-| `ohmyposh` | Windows | `kevinsaji.omp.json` | Prompt theme — path, git status, and a `❯` on its own line |
 | `windows-terminal` | Windows | `settings.partial.json` | Font and colour scheme, **merged** into Windows Terminal's settings |
 | `ssh-windows` | Windows | `.ssh/config` | SSH settings without the Apple-only `UseKeychain` keyword |
 | `git` | both | `.gitconfig`, `.gitignore_global` | Git settings and global ignore rules. Identity is set per-machine and never stored in the repo |
 | `claude` | both | `.claude/settings.json` | Claude Code model and effort settings |
+| `starship` | both | `starship.toml` | One prompt config for zsh, PowerShell, and Git Bash — path, git status, `❯` on its own line |
+| `gitbash` | Windows | `.bashrc` | Wires the shared Starship config into Git Bash |
 
 ---
 
@@ -51,15 +51,15 @@ This clones the repo to `~/dotfiles` (or pulls the latest if it's already there)
 
 1. Clone or update the repo at `~/dotfiles`
 2. Install [Homebrew](https://brew.sh) if not already installed
-3. Install all tools and languages from the `Brewfile`:
+3. `brew update`, install everything in the `Brewfile`, then `brew upgrade` — so an existing Mac converges to the same versions a fresh one gets:
 
    | Tool | Description |
    |---|---|
-   | `powerlevel10k` | Shell prompt theme |
+   | `starship` | Shell prompt — shared config with Windows |
    | `zsh-autosuggestions` | Fish-style command suggestions |
    | `zsh-syntax-highlighting` | Syntax highlighting in the shell |
    | `zoxide` | Smarter `cd` |
-   | `font-fira-code-nerd-font` | Nerd Font required for prompt icons |
+   | `font-fira-code-nerd-font` | Nerd Font for file-type icons (the prompt itself needs none) |
    | `llvm` | C/C++ compiler toolchain |
    | `goenv` + Go | Go version manager |
    | `pyenv` + Python | Python version manager |
@@ -91,7 +91,7 @@ That's the whole install. If something needs Administrator rights, **the script 
 The script will:
 
 1. Clone or update the repo at `~\dotfiles`
-2. Install or upgrade everything in the `Wingetfile` — PowerShell 7, Windows Terminal, Git, oh-my-posh, zoxide and fnm
+2. Install or upgrade everything in the `Wingetfile` — PowerShell 7, Windows Terminal, Git, Starship, zoxide and fnm
 3. Install the language toolchains natively (see below)
 4. Install **FiraCode Nerd Font** per-user for the prompt icons
 5. Install or update the `PSReadLine` and `Terminal-Icons` PowerShell modules
@@ -125,14 +125,17 @@ When it finishes, close the window and open a new Windows Terminal tab.
 | `.gitconfig` | a stub using git's own `[include] path =` |
 | `.ssh/config` | a stub using OpenSSH's `Include` (supported since 7.3; Windows ships 9.x) |
 | `.gitignore_global` | no stub — `core.excludesfile` in `git/.gitconfig` points at the repo |
-| oh-my-posh theme | no stub — the profile passes the repo path to `oh-my-posh init` |
+| Starship theme | no stub — the profile sets `STARSHIP_CONFIG` to the repo path |
 | `claude/settings.json` | **copied** — Claude Code has no include mechanism |
 
 Because the real content stays in the repo, editing a config file edits the same file the repo tracks, and changes can be committed and pushed like normal code. `claude/settings.json` is the one exception: it is a copy, so edit the repo copy and re-run the script.
 
 ### Windows notes
 
-- **The prompt is two lines on purpose.** Path and git status sit on the first line; the `❯` you type after sits on the second, turning red when the last command failed. This is not just cosmetic: PSReadLine tracks where your input begins as a buffer coordinate, and when you resize a terminal it recomputes that from the new width while the prompt on screen was drawn at the old one. With input on its own line the start is always column 0, so there is nothing to get wrong. A long single-line prompt with a right-hand side is what produces the classic "cursor lands in the middle of the prompt after resizing" bug — hence no `rprompt` block here.
+- **Every shell runs the literal same prompt.** `starship/.config/starship.toml` is one file, read directly by zsh, PowerShell, and Git Bash via `STARSHIP_CONFIG` — not several matching configs, the same one. It replaced Powerlevel10k and oh-my-posh, both of which needed a separate file kept in sync by hand.
+- **Git Bash is a third managed shell on Windows, alongside PowerShell.** `gitbash/.bashrc` holds the same Starship wiring as the PowerShell profile; `~/.bashrc` and `~/.bash_profile` are stubs pointing at it, the same pattern as everything else in this section. The one wrinkle: the native `starship.exe` needs a Windows-style path, but bash thinks in POSIX ones, so `gitbash/.bashrc` runs it through `cygpath -w` first — that ships with both real Git for Windows and Cygwin, so it works regardless of which one is running.
+- **The prompt is two lines, plain text, and has no right-hand side.** Path and git status on the first line, the `❯` you type after on the second, turning red when the last command failed. Git status uses Starship's own per-type symbols (`!` modified, `?` untracked, `+` staged, `✘` deleted, `»` renamed, `=` conflicted, `⇡`/`⇣`/`⇕` ahead/behind/diverged) with a file count appended to each via Starship's `$count` variable — its defaults show the bare symbol with no count, so this is one small, documented opt-in on top of them, not a reinvention. No Nerd Font glyphs anywhere in it, so it renders correctly even before the font is picked up.
+- **Resizing the terminal can still misplace the cursor.** On Windows, PSReadLine tracks where your input begins as a buffer coordinate; resize a window while the prompt is wrapped and its idea of that position stops matching what's on screen. This is [PSReadLine #3637](https://github.com/PowerShell/PSReadLine/issues/3637), still open, with no setting that avoids it — **F5** is bound in the profile to `InvokePrompt()`, which redraws the prompt in place without wiping the scrollback the way Ctrl+L does. macOS has the same class of bug in zsh itself, documented in [Powerlevel10k's own FAQ](https://github.com/romkatv/powerlevel10k/blob/master/README.md) as "Horrific mess when resizing terminal window" — zsh redraws at a stale line offset after a resize reflows the prompt. Neither is a defect in this config or in Starship; both live below the prompt layer, in the shell's line editor and the terminal's own reflow racing each other. A short two-line prompt with no right-hand side narrows how often either triggers, but cannot prevent it.
 - **Windows Terminal settings are merged, not replaced.** That file also holds machine-generated profile GUIDs, so overwriting it wholesale would break your profile list. Only `profiles.defaults`, the `kevinsaji` colour scheme, and `defaultProfile` are touched, and a `.dotfiles-backup` is written alongside.
 - **If Windows Terminal has never been launched**, its settings file does not exist yet. Launch it once and re-run `setup.ps1`.
 - **Older Python versions are kept.** `PY_PYTHON` is set so bare `py` runs the newest interpreter; `py -3.12`, `py -3.10` and any Anaconda install stay reachable. Run `py --list` to see them all.
@@ -188,10 +191,10 @@ Some uninstallers detach and finish after the script exits (Anaconda's does this
 
 Any config file already on your machine that this repo manages will be replaced with the repo's version.
 
-- **macOS:** your old versions are adopted into the repo by `stow --adopt` and show up as local changes in `git diff` after the script runs.
+- **macOS:** `stow --adopt` pulls your existing files into the repo, and the script then reverts those specific files to the repo's versions. Uncommitted work you already had in `~/dotfiles` is left untouched — only files that stow actually adopted during this run are reverted.
 - **Windows:** your old versions are moved aside to `<file>.dotfiles-backup` next to the original. Re-running the script never overwrites an existing backup.
 
-Either way, nothing is permanently lost — check the backups or `git diff` and copy across anything you want to keep.
+> The two platforms differ here. Windows keeps a copy of whatever it replaced; macOS does not — an adopted file's previous contents are replaced by the repo's version and are not recoverable afterwards. On a Mac with configs you care about, copy them somewhere safe before the first run.
 
 ---
 

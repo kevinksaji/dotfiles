@@ -36,7 +36,12 @@ if ! command -v brew &>/dev/null; then
 fi
 
 echo "==> Installing packages from Brewfile"
+# `brew bundle` installs what is missing but never touches what is already there,
+# so update and upgrade around it. Without this a machine set up two years ago
+# keeps its old versions while a fresh one gets current ones.
+brew update
 brew bundle --file="$DOTFILES/Brewfile"
+brew upgrade
 
 echo "==> Installing Go via goenv"
 export GOENV_ROOT="$HOME/.goenv"
@@ -75,7 +80,16 @@ read -rp "    Name:  " git_name
 read -rp "    Email: " git_email
 
 echo "==> Stowing dotfiles"
-TOPICS=(zsh git p10k ssh claude)
+# Record what was already dirty. `stow --adopt` pulls the machine's existing
+# files into the repo, and those adopted copies have to be reverted afterwards -
+# but a blanket `git checkout -- .` would also throw away unrelated work in
+# progress. Diffing before against after tells the two apart.
+dirty_before="$(mktemp)"
+git -C "$DOTFILES" diff --name-only | sort > "$dirty_before"
+
+# starship/ is deliberately not stowed - .zshrc points STARSHIP_CONFIG straight
+# at the repo copy, the same way the Windows profile does.
+TOPICS=(zsh git ssh claude)
 for topic in "${TOPICS[@]}"; do
   if [ -d "$DOTFILES/$topic" ]; then
     # --adopt moves any pre-existing real files into the dotfiles repo before symlinking
@@ -84,8 +98,23 @@ for topic in "${TOPICS[@]}"; do
   fi
 done
 
-echo "==> Restoring repo versions (overriding any adopted local changes)"
-git -C "$DOTFILES" checkout -- .
+echo "==> Restoring repo versions of adopted files"
+dirty_after="$(mktemp)"
+git -C "$DOTFILES" diff --name-only | sort > "$dirty_after"
+# Only files that became dirty during stowing. Anything already modified is left
+# alone - it is your work, not something stow adopted.
+adopted="$(comm -13 "$dirty_before" "$dirty_after")"
+rm -f "$dirty_before" "$dirty_after"
+
+if [ -n "$adopted" ]; then
+  while IFS= read -r file; do
+    [ -n "$file" ] || continue
+    git -C "$DOTFILES" checkout -- "$file"
+    echo "  restored: $file"
+  done <<< "$adopted"
+else
+  echo "  nothing was adopted"
+fi
 
 echo "==> Configuring git identity"
 git config -f ~/.gitconfig.local user.name  "$git_name"

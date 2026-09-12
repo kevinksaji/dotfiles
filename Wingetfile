@@ -16,7 +16,7 @@ Microsoft.WindowsTerminal            # terminal emulator
 Git.Git                 --scope user # git (bundles git-lfs - no separate package)
 
 # Shell enhancements
-JanDeDobbeleer.OhMyPosh --scope user # prompt theme engine
+Starship.Starship        --scope user # prompt - shared config with macOS in starship/
 ajeetdsouza.zoxide      --scope user # smarter cd
 
 # Node.js
