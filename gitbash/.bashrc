@@ -3,10 +3,12 @@
 # and the rest come from the user environment setup.ps1 already sets, which
 # Git Bash inherits directly.
 
-# Without this, bash can redraw the prompt using a stale terminal size after
-# a resize, which reprints instead of overwriting and looks like duplicated
-# lines - especially with the two-line Starship prompt below.
+# Check the window size after each command and update LINES/COLUMNS if
+# necessary, and append to the history file rather than overwriting it -
+# standard interactive-bash practice, on by default in most Linux distros'
+# bashrc but not in Git for Windows'.
 shopt -s checkwinsize
+shopt -s histappend
 
 # Starship - the native starship.exe expects a Windows-style path, but bash
 # thinks in POSIX ones; cygpath does the conversion. It ships with both real

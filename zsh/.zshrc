@@ -1,3 +1,14 @@
+# --- History ---
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=50000
+SAVEHIST=50000
+setopt APPEND_HISTORY INC_APPEND_HISTORY SHARE_HISTORY
+setopt HIST_IGNORE_DUPS HIST_IGNORE_SPACE
+
+# --- Editor ---
+export EDITOR="vim"
+export VISUAL="$EDITOR"
+
 # --- Version managers (must come before instant prompt) ---
 
 # pyenv (Python)
