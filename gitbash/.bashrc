@@ -3,6 +3,11 @@
 # and the rest come from the user environment setup.ps1 already sets, which
 # Git Bash inherits directly.
 
+# Without this, bash can redraw the prompt using a stale terminal size after
+# a resize, which reprints instead of overwriting and looks like duplicated
+# lines - especially with the two-line Starship prompt below.
+shopt -s checkwinsize
+
 # Starship - the native starship.exe expects a Windows-style path, but bash
 # thinks in POSIX ones; cygpath does the conversion. It ships with both real
 # Git for Windows and Cygwin, so this works regardless of which one is running.
